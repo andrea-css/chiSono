@@ -46,9 +46,9 @@ $(function () {
         let source = document.getElementById("cardPlayer").innerHTML;
         let template = Handlebars.compile(source)
         $('.messages').append($(template(data)));
-        $("#readyBtn").show();
-        
-       
+        if(data.nickName== nickName){
+            $("#readyBtn").show();
+        }      
     });
 
 
@@ -63,7 +63,7 @@ $(function () {
         }
         e.preventDefault(); // prevents page reloading
         socket.emit('ready', { readyState: btnState });
-        $('#messages').append($('<li>').text("Waiting for other players ..."));
+        $('#messages').append($('<li id="waitMsg">').text("Waiting for other players ..."));
         $("#readyBtn").hide();
         
         return false;
@@ -72,6 +72,7 @@ $(function () {
     socket.on('ready', function (data) {
         console.log(data)
         $("#messageForm").show();
+        $("#waitMsg").hide();
     });
 
     socket.on('chat message', function (msg) {
